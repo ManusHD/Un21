@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="styles.css" rel="stylesheet">
+    <title>¿Un 21?</title>
+</head>
+<body>
+    <div class="container">
+        <form id="form21">
+            <div class="campo">
+                <label for="nPlayer">Número de jugadores</label>
+                <input name="nPlayer" type="number">
+            </div>
+            <button type="button" onclick="crearTabla()">Empezar</button>
+        </form>
+    </div>
+    <script>
+        function crearTabla() {
+            const numJugadores = parseInt($('input[name="nPlayer"]').val(), 10);
+          if (!numJugadores || numJugadores < 1) {
+            alert("Por favor, ingresa un número válido de jugadores mayor que 0.");
+            return;
+          }
+      
+          const table = $("<table>").appendTo(".container");
+          const headerRow = $("<tr>").appendTo(table);
+          $('<th>').text("Jugador").appendTo(headerRow);
+          $("<th>").text("Puntuación").appendTo(headerRow);
+          $("<th>").text("Acciones").appendTo(headerRow);
+      
+          for (let i = 0; i < numJugadores; i++) {
+            const row = $("<tr>").appendTo(table);
+            $('<td contenteditable="true">').text(`Jugador ${i + 1}`).appendTo(row);
+            $("<td>").text("0").appendTo(row);
+            const actionsCell = $("<td>").appendTo(row);
+            $("<button class='suma'>").text("+2").click(() => sumarDosPuntos(i)).appendTo(actionsCell);
+            $("<button class='suma'>").text("+1").click(() => sumarPuntos(i)).appendTo(actionsCell);
+            $("<button class='resta'>").text("-1").click(() => restarPuntos(i)).appendTo(actionsCell);
+            $("<button class='cero'>").text("Poner a 0").click(() => setCero(i)).appendTo(actionsCell);
+          }
+        }
+
+        function sumarDosPuntos(jugadorIndex) {
+          const puntajeCell = $(".container table tr").eq(jugadorIndex + 1).find("td").eq(1);
+          let puntaje = parseInt(puntajeCell.text());
+          puntaje+=2;
+          puntajeCell.text(puntaje);
+        }
+      
+        function sumarPuntos(jugadorIndex) {
+          const puntajeCell = $(".container table tr").eq(jugadorIndex + 1).find("td").eq(1);
+          let puntaje = parseInt(puntajeCell.text());
+          puntaje++;
+          puntajeCell.text(puntaje);
+        }
+      
+        function restarPuntos(jugadorIndex) {
+          const puntajeCell = $(".container table tr").eq(jugadorIndex + 1).find("td").eq(1);
+          let puntaje = parseInt(puntajeCell.text());
+          if (puntaje > 0) {
+            puntaje--;
+            puntajeCell.text(puntaje);
+          }
+        }
+
+        function setCero(jugadorIndex){
+          const puntosPlayer = $(".container table tr").eq(jugadorIndex + 1).find("td").eq(1);
+          puntosPlayer.text(0);
+        }
+
+
+      </script>
+      
+</body>
+</html>
